@@ -650,27 +650,6 @@ button:active {
     }
 }
 
-/* Floating Admin State */
-#admin-toggle {
-    position: fixed;
-    top: 24px;
-    right: 24px;
-    background: rgba(30, 41, 59, 0.8);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    z-index: 1000;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-}
-
-#admin-toggle.viewer {
-    opacity: 0.6;
-}
 
 /* Footer */
 .app-footer {

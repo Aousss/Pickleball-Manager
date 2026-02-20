@@ -45,7 +45,6 @@ const elements = {
     finishMatchBtn: document.getElementById('finish-match-btn'),
     matchLimitInput: document.getElementById('match-limit'),
     championDisplay: document.getElementById('champion-display'),
-    adminToggle: document.getElementById('admin-toggle'),
     // Share & Data
     shareMatchesBtn: document.getElementById('share-matches-btn'),
     shareRankingsBtn: document.getElementById('share-rankings-btn'),
@@ -86,17 +85,6 @@ let tempScoreB = 0;
 document.addEventListener('DOMContentLoaded', () => {
     loadState();
 
-    // Admin/Viewer Mode Init
-    const isViewer = localStorage.getItem('pickleball_viewer_mode') === 'true';
-    if (isViewer) {
-        document.body.classList.add('viewer-mode');
-        if (elements.adminToggle) {
-            elements.adminToggle.innerHTML = '<i class="fa-solid fa-eye"></i> Viewer: ON';
-            elements.adminToggle.classList.add('viewer');
-        }
-    } else {
-        document.body.classList.remove('viewer-mode');
-    }
 
     // Initialize inputs from state
     if (elements.matchLimitInput) {
@@ -126,22 +114,6 @@ function setupEventListeners() {
         });
     });
 
-    // Admin Toggle
-    if (elements.adminToggle) {
-        elements.adminToggle.addEventListener('click', () => {
-            const isNowViewer = document.body.classList.toggle('viewer-mode');
-            localStorage.setItem('pickleball_viewer_mode', isNowViewer);
-
-            if (isNowViewer) {
-                elements.adminToggle.innerHTML = '<i class="fa-solid fa-eye"></i> Viewer: ON';
-                elements.adminToggle.classList.add('viewer');
-            } else {
-                elements.adminToggle.innerHTML = '<i class="fa-solid fa-user-shield"></i> Admin: ON';
-                elements.adminToggle.classList.remove('viewer');
-                pushToCloud(); // Sync our current state to be the truth
-            }
-        });
-    }
 
     // Settings
     elements.matchLimitInput.addEventListener('change', (e) => {
