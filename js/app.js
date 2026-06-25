@@ -1403,17 +1403,34 @@ function handleAuthStateChanged(user) {
     const isCloudMode = !!window.db;
 
     if (!isCloudMode) {
-        // Local Mode: User is Host, hide auth widget
+        // Local Mode: User is Host, show mock profile details on the right
         document.body.classList.remove('viewer-mode');
         document.body.classList.add('role-host');
         document.body.classList.remove('role-scorekeeper', 'role-viewer');
-        if (elements.authWidget) elements.authWidget.style.display = 'none';
+        
+        if (elements.authWidget) {
+            elements.authWidget.style.display = 'block';
+        }
+        if (elements.authSigninBtn) {
+            elements.authSigninBtn.style.display = 'none';
+        }
+        if (elements.authProfile) {
+            elements.authProfile.style.display = 'flex';
+            if (elements.authName) elements.authName.innerText = 'Muhamad Firdaus';
+            const roleLabel = document.getElementById('auth-role');
+            if (roleLabel) roleLabel.innerText = 'ADMIN';
+            
+            if (elements.authAvatar) elements.authAvatar.style.display = 'none';
+            const avatarInitial = document.getElementById('auth-avatar-initial');
+            if (avatarInitial) {
+                avatarInitial.innerText = 'M';
+                avatarInitial.style.display = 'flex';
+            }
+            if (elements.authSignoutBtn) elements.authSignoutBtn.style.display = 'none';
+        }
         refreshUI();
         return;
     }
-
-    // Cloud Mode: Display Auth widget
-    if (elements.authWidget) elements.authWidget.style.display = 'block';
 
     if (!user) {
         // If not logged in and not in spectator mode, redirect to login
@@ -1429,15 +1446,40 @@ function handleAuthStateChanged(user) {
         document.body.classList.add('role-viewer');
         document.body.classList.remove('role-host', 'role-scorekeeper');
 
-        if (elements.authSigninBtn) elements.authSigninBtn.style.display = 'inline-block';
-        if (elements.authProfile) elements.authProfile.style.display = 'none';
+        // Hide auth widget if no account
+        if (elements.authWidget) elements.authWidget.style.display = 'none';
+        
+        const roleLabel = document.getElementById('auth-role');
+        if (roleLabel) {
+            roleLabel.innerText = 'SPECTATOR';
+        }
     } else {
+        // Show auth widget when logged in
+        if (elements.authWidget) elements.authWidget.style.display = 'block';
+
         // Signed in: determine role from state
         if (elements.authSigninBtn) elements.authSigninBtn.style.display = 'none';
         if (elements.authProfile) {
             elements.authProfile.style.display = 'flex';
-            if (elements.authAvatar) elements.authAvatar.src = user.photoURL || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
-            if (elements.authName) elements.authName.innerText = user.displayName || user.email || 'Admin';
+            const avatarImg = elements.authAvatar;
+            const avatarInitial = document.getElementById('auth-avatar-initial');
+            const nameStr = user.displayName || user.email || 'Muhamad Firdaus';
+            
+            if (user.photoURL) {
+                if (avatarImg) {
+                    avatarImg.src = user.photoURL;
+                    avatarImg.style.display = 'block';
+                }
+                if (avatarInitial) avatarInitial.style.display = 'none';
+            } else {
+                if (avatarImg) avatarImg.style.display = 'none';
+                if (avatarInitial) {
+                    avatarInitial.innerText = nameStr.charAt(0).toUpperCase();
+                    avatarInitial.style.display = 'flex';
+                }
+            }
+            if (elements.authName) elements.authName.innerText = nameStr;
+            if (elements.authSignoutBtn) elements.authSignoutBtn.style.display = 'block';
         }
 
         // Role assignment:
@@ -1462,6 +1504,12 @@ function handleAuthStateChanged(user) {
             document.body.classList.add('role-scorekeeper');
         } else {
             document.body.classList.add('role-viewer', 'viewer-mode');
+        }
+
+        // Set role label text in profile header
+        const roleLabel = document.getElementById('auth-role');
+        if (roleLabel) {
+            roleLabel.innerText = userRole === 'host' ? 'ADMIN' : userRole.toUpperCase();
         }
     }
 

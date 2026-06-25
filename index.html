@@ -16,39 +16,53 @@
 <body>
 
     <div class="app-container">
-        <!-- Top Auth Widget -->
-        <div id="auth-widget" class="top-auth-widget" style="display: none;">
-            <button id="auth-signin-btn" class="btn-sm btn-accent">
-                <i class="fa-brands fa-google"></i> Sign In
-            </button>
-            <div id="auth-profile" class="profile-container" style="display: none;">
-                <img id="auth-avatar" class="profile-avatar" src="" alt="Avatar">
-                <span id="auth-name" class="profile-name"></span>
-                <button id="auth-signout-btn" class="btn-sm btn-danger-outline" title="Sign Out">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                </button>
+        <!-- App Header (Logo, Nav, Auth) -->
+        <header class="app-header">
+            <div class="header-logo">
+                <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+                <span>RallyMate</span>
             </div>
-        </div>
 
-        <!-- Navigation -->
-        <nav class="glass-nav">
-            <a href="index.html" class="nav-btn active" data-target="setup-screen">
-                <i class="fa-solid fa-sliders"></i>
-                <span>Setup</span>
-            </a>
-            <a href="matches.html" class="nav-btn" data-target="matches-screen">
-                <i class="fa-solid fa-calendar-check"></i>
-                <span>Matches</span>
-            </a>
-            <a href="rankings.html" class="nav-btn" data-target="ranking-screen">
-                <i class="fa-solid fa-ranking-star"></i>
-                <span>Rankings</span>
-            </a>
-            <a href="analytics.html" class="nav-btn" data-target="h2h-screen">
-                <i class="fa-solid fa-chart-line"></i>
-                <span>Analytics</span>
-            </a>
-        </nav>
+            <!-- Navigation -->
+            <nav class="glass-nav">
+                <a href="index.html" class="nav-btn active" data-target="setup-screen">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>Setup</span>
+                </a>
+                <a href="matches.html" class="nav-btn" data-target="matches-screen">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Matches</span>
+                </a>
+                <a href="rankings.html" class="nav-btn" data-target="ranking-screen">
+                    <i class="fa-solid fa-ranking-star"></i>
+                    <span>Rankings</span>
+                </a>
+                <a href="analytics.html" class="nav-btn" data-target="h2h-screen">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+            </nav>
+
+            <!-- Top Auth Widget -->
+            <div id="auth-widget" class="top-auth-widget" style="display: none;">
+                <button id="auth-signin-btn" class="btn-sm btn-accent">
+                    <i class="fa-brands fa-google"></i> Sign In
+                </button>
+                <div id="auth-profile" class="profile-container" style="display: none;">
+                    <div class="profile-text">
+                        <span id="auth-name" class="profile-name"></span>
+                        <span id="auth-role" class="profile-role">ADMIN</span>
+                    </div>
+                    <div class="profile-avatar-container">
+                        <img id="auth-avatar" class="profile-avatar" src="" alt="Avatar" onerror="this.style.display='none'; const init = document.getElementById('auth-avatar-initial'); if (init) init.style.display='flex';">
+                        <div id="auth-avatar-initial" class="profile-avatar-initial">A</div>
+                    </div>
+                    <button id="auth-signout-btn" class="btn-sm btn-danger-outline" title="Sign Out">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
 
         <!-- Main Content -->
         <main id="main-content">

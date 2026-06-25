@@ -138,25 +138,28 @@ body::after {
 
 @media (min-width: 1100px) {
     .app-container {
-        max-width: 2000px;
-        display: grid;
-        grid-template-columns: 260px 1fr;
-        grid-template-areas:
-            "nav main"
-            "nav footer";
-        gap: 40px;
+        max-width: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
         padding-bottom: 40px;
-        align-items: start;
     }
 
     #main-content {
-        grid-area: main;
+        padding: 40px 40px 20px 40px;
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
     }
 
     .app-footer {
-        grid-area: footer;
+        padding: 20px 40px;
         text-align: left;
         margin-top: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
     }
 }
 
@@ -242,20 +245,20 @@ p {
 
 @media (min-width: 1100px) {
     .glass-nav {
-        grid-area: nav;
-        position: sticky;
-        top: 40px;
-        bottom: auto;
-        left: auto;
+        position: static;
         transform: none;
-        width: 100%;
+        width: auto;
         max-width: none;
         height: auto;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding: 40px 12px;
-        gap: 12px;
-        border-radius: var(--radius-lg);
+        flex-direction: row;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border: none;
+        box-shadow: none;
+        gap: 32px;
+        border-radius: 0;
+        padding: 0;
     }
 }
 
@@ -280,18 +283,14 @@ p {
 
 @media (min-width: 1100px) {
     .nav-btn {
-        flex-direction: row;
-        width: 100%;
-        height: 56px;
-        padding: 0 20px;
-        gap: 16px;
-        font-size: 1rem;
-        justify-content: flex-start;
+        width: auto;
+        min-width: 80px;
+        padding: 6px 12px;
+        font-size: 0.85rem;
     }
 
     .nav-btn i {
-        font-size: 1.2rem;
-        width: 24px;
+        font-size: 1.25rem;
         text-align: center;
     }
 }
@@ -307,8 +306,8 @@ p {
 
 @media (min-width: 1100px) {
     .nav-btn.active {
-        background: rgba(99, 102, 241, 0.1);
-        color: var(--primary-light);
+        background: rgba(255, 91, 4, 0.08);
+        color: var(--accent);
     }
 }
 
@@ -320,7 +319,7 @@ p {
 
 @media (min-width: 1100px) {
     .nav-btn.active i {
-        transform: translateX(4px);
+        transform: translateY(-2px);
     }
 }
 
@@ -337,12 +336,12 @@ p {
 
 @media (min-width: 1100px) {
     .nav-btn.active::after {
-        left: 0;
-        bottom: 50%;
-        transform: translateY(50%);
-        width: 3px;
-        height: 24px;
-        border-radius: 0 4px 4px 0;
+        left: 50%;
+        bottom: -4px;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
     }
 }
 
@@ -841,13 +840,65 @@ button:active {
     position: relative;
 }
 
-/* Top Auth Widget */
+/* App Header Layout */
+.app-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    z-index: 100;
+    border-bottom: 1px solid var(--glass-border);
+    background: rgba(22, 35, 42, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.header-logo i {
+    color: var(--accent);
+    filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+@media (min-width: 1100px) {
+    .app-header {
+        background: #111b21; /* Match header bar color in screenshot */
+        padding: 16px 48px;
+        position: sticky;
+        top: 0;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+    }
+    
+    .header-logo {
+        font-size: 1.5rem;
+        justify-self: start;
+    }
+    
+    .glass-nav {
+        justify-self: center;
+    }
+    
+    .top-auth-widget {
+        justify-self: end;
+    }
+}
+
+/* Top Auth Widget & Profile styling */
 .top-auth-widget {
-    position: absolute;
-    top: 20px;
-    right: 20px;
     z-index: 999;
 }
+
 .profile-container {
     display: flex;
     align-items: center;
@@ -856,19 +907,89 @@ button:active {
     border: 1px solid var(--glass-border);
     padding: 6px 12px;
     border-radius: 20px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
 }
-.profile-avatar {
+
+.profile-avatar-container {
     width: 28px;
     height: 28px;
     border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid var(--accent);
 }
+
+.profile-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+}
+
+.profile-avatar-initial {
+    width: 100%;
+    height: 100%;
+    background: #a252f5; /* Premium purple matching screenshot design! */
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
 .profile-name {
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 700;
     color: var(--text-primary);
+}
+
+.profile-text {
+    display: none;
+    flex-direction: column;
+    text-align: right;
+}
+
+.profile-role {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+@media (min-width: 1100px) {
+    .profile-text {
+        display: flex;
+    }
+    
+    .profile-container {
+        background: transparent;
+        border: none;
+        padding: 0;
+        gap: 12px;
+    }
+    
+    .profile-avatar-container {
+        width: 38px;
+        height: 38px;
+        border-width: 2px;
+        order: 1; /* Avatar container on the right */
+    }
+    
+    .profile-avatar-initial {
+        font-size: 1.1rem;
+    }
+    
+    .profile-text {
+        order: 0; /* Text on the left of Avatar */
+    }
+    
+    #auth-signout-btn {
+        order: 2; /* Signout button on the far right */
+        margin-left: 8px;
+    }
 }
 
 /* Role-Based Element Visibility */
