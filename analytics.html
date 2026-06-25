@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pickleball | Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Top Auth Widget -->
+        <div id="auth-widget" class="top-auth-widget" style="display: none;">
+            <button id="auth-signin-btn" class="btn-sm btn-accent">
+                <i class="fa-brands fa-google"></i> Sign In
+            </button>
+            <div id="auth-profile" class="profile-container" style="display: none;">
+                <img id="auth-avatar" class="profile-avatar" src="" alt="Avatar">
+                <span id="auth-name" class="profile-name"></span>
+                <button id="auth-signout-btn" class="btn-sm btn-danger-outline" title="Sign Out">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="glass-nav">
+            <a href="index.html" class="nav-btn" data-target="setup-screen">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Setup</span>
+            </a>
+            <a href="matches.html" class="nav-btn" data-target="matches-screen">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Matches</span>
+            </a>
+            <a href="rankings.html" class="nav-btn" data-target="ranking-screen">
+                <i class="fa-solid fa-ranking-star"></i>
+                <span>Rankings</span>
+            </a>
+            <a href="analytics.html" class="nav-btn active" data-target="h2h-screen">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="main-content">
+
+            <!-- Head to Head Screen -->
+            <section id="h2h-screen" class="screen active">
+                <header class="section-header">
+                    <h2>Analytics</h2>
+                </header>
+
+                <div class="glass-card">
+                    <p style="margin-bottom: 16px; font-size: 0.9rem;">Compare performance history between two
+                        competitors.</p>
+                    <div class="h2h-selectors" style="display: flex; flex-direction: column; gap: 12px;">
+                        <select id="h2h-player-1">
+                            <option value="">Select Player 1</option>
+                        </select>
+                        <div class="h2h-vs"
+                            style="text-align: center; color: var(--accent); font-weight: 900; opacity: 0.5;">VS</div>
+                        <select id="h2h-player-2">
+                            <option value="">Select Player 2</option>
+                        </select>
+                    </div>
+
+                    <style>
+                        @media (min-width: 768px) {
+                            .h2h-selectors {
+                                flex-direction: row !important;
+                                align-items: center;
+                            }
+
+                            .h2h-vs {
+                                margin: 0 10px;
+                            }
+                        }
+                    </style>
+                </div>
+
+                <div id="h2h-results">
+                    <div class="empty-state-card">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        <p>Select two players to analyze their history.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="app-footer">
+            &copy; 2026 <strong>Pickleball Pro</strong> <br>
+            Engineered for excellence.
+        </footer>
+    </div>
+
+    <!-- Firebase SDKs (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

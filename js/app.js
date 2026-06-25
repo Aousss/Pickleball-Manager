@@ -14,8 +14,12 @@ let state = {
     },
     isPlayoffStarted: false,
     lockedStats: null, // To store the frozen Regular Season standings
-    rankingSort: { key: 'won', dir: 'desc' }
+    rankingSort: { key: 'won', dir: 'desc' },
+    ownerUid: null,
+    scorekeepers: []
 };
+
+let currentMeta = null;
 
 // DOM Elements
 const elements = {
@@ -68,7 +72,19 @@ const elements = {
     h2hPlayer2: document.getElementById('h2h-player-2'),
     h2hResults: document.getElementById('h2h-results'),
     // Timer
-    timerClock: document.getElementById('timer-clock')
+    timerClock: document.getElementById('timer-clock'),
+    // Auth Widget
+    authWidget: document.getElementById('auth-widget'),
+    authSigninBtn: document.getElementById('auth-signin-btn'),
+    authProfile: document.getElementById('auth-profile'),
+    authAvatar: document.getElementById('auth-avatar'),
+    authName: document.getElementById('auth-name'),
+    authSignoutBtn: document.getElementById('auth-signout-btn'),
+    // Private Tournaments
+    newTournamentPrivate: document.getElementById('new-tournament-private'),
+    tournamentShareSection: document.getElementById('tournament-share-section'),
+    tournamentShareCode: document.getElementById('tournament-share-code'),
+    copyShareCodeBtn: document.getElementById('copy-share-code-btn')
 };
 
 // Timer variables
@@ -101,85 +117,107 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function setupEventListeners() {
     // Navigation
-    elements.navBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const target = btn.dataset.target;
-
-            // UI Update
-            elements.navBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            elements.screens.forEach(s => s.classList.remove('active'));
-            document.getElementById(target).classList.add('active');
+    if (elements.navBtns) {
+        elements.navBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const target = btn.dataset.target;
+                if (target) {
+                    e.preventDefault();
+                    navigateTo(target);
+                }
+            });
         });
-    });
-
+    }
 
     // Settings
-    elements.matchLimitInput.addEventListener('change', (e) => {
-        state.settings.matchLimit = parseInt(e.target.value) || 20;
-        saveState();
-        updateMatchHeader();
-    });
+    if (elements.matchLimitInput) {
+        elements.matchLimitInput.addEventListener('change', (e) => {
+            state.settings.matchLimit = parseInt(e.target.value) || 20;
+            saveState();
+            updateMatchHeader();
+        });
+    }
 
     // Player Management
-    elements.addPlayerBtn.addEventListener('click', addPlayer);
-    elements.playerInput.addEventListener('keypress', (e) => {
-        // If it's a textarea, Enter should add a newline (which is a divider), 
-        // but we can also allow Ctrl+Enter to submit.
-        if (e.key === 'Enter' && e.ctrlKey) {
-            e.preventDefault();
-            addPlayer();
-        }
-    });
+    if (elements.addPlayerBtn) {
+        elements.addPlayerBtn.addEventListener('click', addPlayer);
+    }
+    if (elements.playerInput) {
+        elements.playerInput.addEventListener('keypress', (e) => {
+            // If it's a textarea, Enter should add a newline (which is a divider), 
+            // but we can also allow Ctrl+Enter to submit.
+            if (e.key === 'Enter' && e.ctrlKey) {
+                e.preventDefault();
+                addPlayer();
+            }
+        });
+    }
 
-    elements.startTournamentBtn.addEventListener('click', () => {
-        if (state.players.length < 4) {
-            alert('You need at least 4 players to start.');
-            return;
-        }
+    if (elements.startTournamentBtn) {
+        elements.startTournamentBtn.addEventListener('click', () => {
+            if (state.players.length < 4) {
+                alert('You need at least 4 players to start.');
+                return;
+            }
 
-        // If no matches exist, generate initial schedule automatically
-        if (state.matches.length === 0) {
-            regenerateSchedule();
-        }
+            // If no matches exist, generate initial schedule automatically
+            if (state.matches.length === 0) {
+                regenerateSchedule();
+            }
 
-        navigateTo('matches-screen');
-    });
+            navigateTo('matches-screen');
+        });
+    }
 
     // Playoff Logic
     if (elements.startPlayoffsBtn) {
         elements.startPlayoffsBtn.addEventListener('click', startPlayoffs);
     }
 
-    elements.resetAllBtn.addEventListener('click', () => {
-        if (confirm('Are you sure? This will delete all data.')) {
-            state = {
-                players: [],
-                matches: [],
-                playoffMatches: [],
-                currentRound: 0,
-                settings: { matchLimit: 20 },
-                isPlayoffStarted: false,
-                lockedStats: null
-            };
-            elements.matchLimitInput.value = 20;
-            saveState();
-            refreshUI(); // Use new helper
-            alert("System Reset.");
-        }
-    });
+    if (elements.resetAllBtn) {
+        elements.resetAllBtn.addEventListener('click', () => {
+            if (confirm('Are you sure? This will delete all data.')) {
+                state = {
+                    players: [],
+                    matches: [],
+                    playoffMatches: [],
+                    currentRound: 0,
+                    settings: { matchLimit: 20 },
+                    isPlayoffStarted: false,
+                    lockedStats: null
+                };
+                if (elements.matchLimitInput) elements.matchLimitInput.value = 20;
+                saveState();
+                refreshUI(); // Use new helper
+                alert("System Reset.");
+            }
+        });
+    }
 
     // Match Management
-    elements.generateRoundBtn.addEventListener('click', regenerateSchedule);
+    if (elements.generateRoundBtn) {
+        elements.generateRoundBtn.addEventListener('click', regenerateSchedule);
+    }
 
     // Scoring Modal
-    elements.closeModalBtn.addEventListener('click', closeScoringModal);
-    elements.btnScoreA.addEventListener('click', () => updateTempScore('A', 1));
-    elements.btnScoreB.addEventListener('click', () => updateTempScore('B', 1));
-    elements.btnMinusA.addEventListener('click', () => updateTempScore('A', -1));
-    elements.btnMinusB.addEventListener('click', () => updateTempScore('B', -1));
-    elements.finishMatchBtn.addEventListener('click', finishMatch);
+    if (elements.closeModalBtn) {
+        elements.closeModalBtn.addEventListener('click', closeScoringModal);
+    }
+    if (elements.btnScoreA) {
+        elements.btnScoreA.addEventListener('click', () => updateTempScore('A', 1));
+    }
+    if (elements.btnScoreB) {
+        elements.btnScoreB.addEventListener('click', () => updateTempScore('B', 1));
+    }
+    if (elements.btnMinusA) {
+        elements.btnMinusA.addEventListener('click', () => updateTempScore('A', -1));
+    }
+    if (elements.btnMinusB) {
+        elements.btnMinusB.addEventListener('click', () => updateTempScore('B', -1));
+    }
+    if (elements.finishMatchBtn) {
+        elements.finishMatchBtn.addEventListener('click', finishMatch);
+    }
 
     const resetMatchBtn = document.getElementById('reset-match-btn');
     if (resetMatchBtn) {
@@ -214,6 +252,14 @@ function setupEventListeners() {
         });
     }
 
+    // Google Auth listeners
+    if (elements.authSigninBtn) {
+        elements.authSigninBtn.addEventListener('click', signInWithGoogle);
+    }
+    if (elements.authSignoutBtn) {
+        elements.authSignoutBtn.addEventListener('click', signOut);
+    }
+
     // Tournament Management
     if (elements.createTournamentBtn) {
         elements.createTournamentBtn.addEventListener('click', createNewTournament);
@@ -225,6 +271,14 @@ function setupEventListeners() {
     }
     if (elements.tournamentSelect) {
         elements.tournamentSelect.addEventListener('change', switchTournament);
+    }
+    if (elements.copyShareCodeBtn) {
+        elements.copyShareCodeBtn.addEventListener('click', () => {
+            const code = elements.tournamentShareCode.innerText;
+            if (code && code !== '------') {
+                copyToClipboard(code);
+            }
+        });
     }
 
     // Head-to-Head Listeners
@@ -242,14 +296,25 @@ function setupEventListeners() {
             this.style.height = (this.scrollHeight) + 'px';
         });
     }
-
-    // Head to Head
-    if (elements.h2hPlayer1) elements.h2hPlayer1.addEventListener('change', renderH2H);
-    if (elements.h2hPlayer2) elements.h2hPlayer2.addEventListener('change', renderH2H);
 }
 
 // --- Navigation Helper ---
 function navigateTo(screenId) {
+    const screenToUrl = {
+        'setup-screen': 'index.html',
+        'matches-screen': 'matches.html',
+        'ranking-screen': 'rankings.html',
+        'h2h-screen': 'analytics.html'
+    };
+
+    if (screenToUrl[screenId]) {
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        if (currentPage !== screenToUrl[screenId]) {
+            window.location.href = screenToUrl[screenId];
+            return;
+        }
+    }
+
     document.querySelectorAll('.nav-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.target === screenId);
     });
@@ -412,6 +477,7 @@ function removePlayer(id) {
 }
 
 function renderPlayers() {
+    if (!elements.playerList) return;
     elements.playerList.innerHTML = '';
 
     if (state.players.length === 0) {
@@ -602,6 +668,7 @@ function regenerateSchedule() {
 }
 
 function updateMatchHeader() {
+    if (!elements.generateRoundBtn) return;
     const limit = state.settings.matchLimit || 20;
     const count = state.matches.length;
     const completedCount = state.matches.filter(m => m.completed).length;
@@ -622,6 +689,8 @@ function updateMatchHeader() {
 }
 
 function renderMatches() {
+    if (!elements.matchesList) return;
+
     // 1. Pre-calculate pairing frequencies up to each match
     const partnerFreq = {};
     const matchFreqMap = {};
@@ -653,11 +722,13 @@ function renderMatches() {
 
     // 2. Playoff Matches
     if (state.isPlayoffStarted && state.playoffMatches.length > 0) {
-        elements.playoffSection.style.display = 'block';
-        elements.playoffMatchesList.innerHTML = '';
-        state.playoffMatches.forEach(match => {
-            elements.playoffMatchesList.appendChild(createMatchCard(match));
-        });
+        if (elements.playoffSection) elements.playoffSection.style.display = 'block';
+        if (elements.playoffMatchesList) {
+            elements.playoffMatchesList.innerHTML = '';
+            state.playoffMatches.forEach(match => {
+                elements.playoffMatchesList.appendChild(createMatchCard(match));
+            });
+        }
 
         // Check for winner
         checkPlayoffWinner();
@@ -802,6 +873,10 @@ function getPlayer(id) {
 
 // --- Scoring Logic ---
 function openScoringModal(matchId) {
+    if (document.body.classList.contains('role-viewer')) {
+        alert("You are in Viewer Mode. Sign In to log scores.");
+        return;
+    }
     // Find in matches OR playoffMatches
     let match = state.matches.find(m => m.id === matchId);
     if (!match) match = state.playoffMatches.find(m => m.id === matchId);
@@ -869,8 +944,8 @@ function updateTempScore(team, delta) {
 }
 
 function updateScoreDisplay() {
-    elements.scoreA.innerText = tempScoreA;
-    elements.scoreB.innerText = tempScoreB;
+    if (elements.scoreA) elements.scoreA.innerText = tempScoreA;
+    if (elements.scoreB) elements.scoreB.innerText = tempScoreB;
 }
 
 function finishMatch() {
@@ -954,7 +1029,7 @@ function updateTimerDisplay(match) {
 function updateListTimers() {
     // Only bother if we are on the matches screen
     const matchesScreen = document.getElementById('matches-screen');
-    if (!matchesScreen || !matchesScreen.classList.contains('active')) return;
+    if (!matchesScreen) return;
 
     document.querySelectorAll('.match-duration-box').forEach(box => {
         const matchId = box.dataset.matchId;
@@ -1076,6 +1151,7 @@ function getH2HResult(id1, id2) {
 }
 
 function updateRankings() {
+    if (!elements.rankingBody) return;
     // If playoffs started, use LOCKED stats for rendering
     let displayPlayers = [];
     let isLocked = false;
@@ -1088,13 +1164,13 @@ function updateRankings() {
         if (elements.startPlayoffsBtn) {
             elements.startPlayoffsBtn.style.display = 'inline-block';
             elements.startPlayoffsBtn.innerText = "Cancel Playoffs";
-            elements.startPlayoffsBtn.style.background = "#ef4444"; // Red for cancel
+            elements.startPlayoffsBtn.style.background = "var(--danger)";
             elements.startPlayoffsBtn.style.color = "white";
         }
 
         const headerH2 = document.querySelector('#ranking-screen h2');
         if (headerH2 && !headerH2.innerHTML.includes('LOCKED')) {
-            headerH2.innerHTML = 'Leaderboard <span style="font-size:0.4em; background:#ef4444; padding:2px 6px; border-radius:4px; vertical-align:middle;">LOCKED</span>';
+            headerH2.innerHTML = 'Leaderboard <span style="font-size:0.4em; background:var(--danger); padding:2px 6px; border-radius:4px; vertical-align:middle; color: white;">LOCKED</span>';
         }
 
     } else {
@@ -1112,8 +1188,8 @@ function updateRankings() {
             if (elements.startPlayoffsBtn) {
                 elements.startPlayoffsBtn.style.display = 'inline-block';
                 elements.startPlayoffsBtn.innerText = "Start Playoffs (Top 4)";
-                elements.startPlayoffsBtn.style.background = "linear-gradient(135deg, #fbbf24, #d97706)";
-                elements.startPlayoffsBtn.style.color = "black";
+                elements.startPlayoffsBtn.style.background = "linear-gradient(135deg, var(--accent), var(--secondary))";
+                elements.startPlayoffsBtn.style.color = "white";
             }
         } else {
             if (elements.startPlayoffsBtn) elements.startPlayoffsBtn.style.display = 'none';
@@ -1182,9 +1258,9 @@ function updateRankings() {
         let accentColor = 'var(--accent)';
 
         const colorPalettes = [
-            { a: '#6366f1', b: '#d946ef', bgA: 'rgba(99, 102, 241, 0.1)', bgB: 'rgba(217, 70, 239, 0.1)' }, // Indigo / Fuchsia
-            { a: '#10b981', b: '#f59e0b', bgA: 'rgba(16, 185, 129, 0.1)', bgB: 'rgba(245, 158, 11, 0.1)' }, // Emerald / Amber
-            { a: '#0ea5e9', b: '#f43f5e', bgA: 'rgba(14, 165, 233, 0.1)', bgB: 'rgba(244, 63, 94, 0.1)' }  // Sky / Rose
+            { a: '#7FAD80', b: '#3C85D4', bgA: 'rgba(127, 173, 128, 0.1)', bgB: 'rgba(60, 133, 212, 0.1)' }, // Sage / Blue
+            { a: '#10b981', b: '#00544D', bgA: 'rgba(16, 185, 129, 0.1)', bgB: 'rgba(0, 84, 77, 0.1)' },    // Emerald / Teal
+            { a: '#3C85D4', b: '#0ea5e9', bgA: 'rgba(60, 133, 212, 0.1)', bgB: 'rgba(14, 165, 233, 0.1)' }  // Blue / Sky
         ];
 
         if (isLive) {
@@ -1246,6 +1322,9 @@ function loadFirebaseConfig() {
 
     if (syncConfig.apiKey && syncConfig.projectId) {
         initFirebase();
+    } else {
+        // Local Mode: Fallback to local host role
+        handleAuthStateChanged(null);
     }
 }
 
@@ -1270,7 +1349,7 @@ function saveFirebaseConfig(overrideRoom = null) {
 function updateSyncStatus(msg, isError = false) {
     if (elements.syncStatus) {
         elements.syncStatus.innerText = msg;
-        elements.syncStatus.style.color = isError ? '#ef4444' : '#22c55e';
+        elements.syncStatus.style.color = isError ? 'var(--danger)' : 'var(--success)';
     }
 }
 
@@ -1300,6 +1379,13 @@ function initFirebase() {
         window.db = db; // Global reference for transparency
         updateSyncStatus("Cloud Connected.");
 
+        // Start Auth Listeners
+        const auth = firebase.auth();
+        window.auth = auth;
+        auth.onAuthStateChanged((user) => {
+            handleAuthStateChanged(user);
+        });
+
         // Start Listening IMMEDIATELY
         subscribeToRoom();
 
@@ -1309,6 +1395,92 @@ function initFirebase() {
     } catch (err) {
         console.error("Firebase Init Error:", err);
         updateSyncStatus("Connection failed.", true);
+    }
+}
+
+// --- Authentication & Role-Based Access ---
+function handleAuthStateChanged(user) {
+    const isCloudMode = !!window.db;
+
+    if (!isCloudMode) {
+        // Local Mode: User is Host, hide auth widget
+        document.body.classList.remove('viewer-mode');
+        document.body.classList.add('role-host');
+        document.body.classList.remove('role-scorekeeper', 'role-viewer');
+        if (elements.authWidget) elements.authWidget.style.display = 'none';
+        refreshUI();
+        return;
+    }
+
+    // Cloud Mode: Display Auth widget
+    if (elements.authWidget) elements.authWidget.style.display = 'block';
+
+    if (!user) {
+        // If not logged in and not in spectator mode, redirect to login
+        const isSpectator = sessionStorage.getItem('spectator_mode') === 'true';
+        if (!isSpectator) {
+            console.log("No active session, redirecting to login.html");
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Signed out / spectator: spectator role
+        document.body.classList.add('viewer-mode');
+        document.body.classList.add('role-viewer');
+        document.body.classList.remove('role-host', 'role-scorekeeper');
+
+        if (elements.authSigninBtn) elements.authSigninBtn.style.display = 'inline-block';
+        if (elements.authProfile) elements.authProfile.style.display = 'none';
+    } else {
+        // Signed in: determine role from state
+        if (elements.authSigninBtn) elements.authSigninBtn.style.display = 'none';
+        if (elements.authProfile) {
+            elements.authProfile.style.display = 'flex';
+            if (elements.authAvatar) elements.authAvatar.src = user.photoURL || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+            if (elements.authName) elements.authName.innerText = user.displayName || user.email || 'Admin';
+        }
+
+        // Role assignment:
+        let userRole = 'viewer'; // Default fallback
+
+        // If the tournament has no owner, self-assign as Host
+        if (!state.ownerUid) {
+            state.ownerUid = user.uid;
+            userRole = 'host';
+            saveState();
+        } else if (state.ownerUid === user.uid) {
+            userRole = 'host';
+        } else if (state.scorekeepers && state.scorekeepers.includes(user.uid)) {
+            userRole = 'scorekeeper';
+        }
+
+        // Apply classes
+        document.body.classList.remove('role-host', 'role-scorekeeper', 'role-viewer', 'viewer-mode');
+        if (userRole === 'host') {
+            document.body.classList.add('role-host');
+        } else if (userRole === 'scorekeeper') {
+            document.body.classList.add('role-scorekeeper');
+        } else {
+            document.body.classList.add('role-viewer', 'viewer-mode');
+        }
+    }
+
+    refreshUI();
+}
+
+async function signInWithGoogle() {
+    window.location.href = 'login.html';
+}
+
+async function signOut() {
+    if (!window.auth) return;
+    try {
+        sessionStorage.removeItem('spectator_mode');
+        sessionStorage.removeItem('spectator_room');
+        await firebase.auth().signOut();
+        window.location.href = 'login.html';
+    } catch (err) {
+        console.error("Sign out error:", err);
     }
 }
 
@@ -1338,6 +1510,7 @@ function subscribeToRoom() {
             recalculateStats();
 
             localStorage.setItem('pickleball_state', JSON.stringify(state));
+            currentMeta = val.meta || {};
             refreshUI();
             updateSyncStatus("Live Sync: " + syncConfig.room);
         } else {
@@ -1347,11 +1520,26 @@ function subscribeToRoom() {
             if (!document.body.classList.contains('viewer-mode') && (state.players.length > 0 || state.matches.length > 0)) {
                 pushToCloud();
             }
+            currentMeta = null;
+            refreshUI();
         }
     }, (error) => {
         console.error("RTDB Sync Error:", error);
         updateSyncStatus("Sync error: check connection.", true);
     });
+}
+
+function updateTournamentShareSection(meta) {
+    if (!elements.tournamentShareSection || !elements.tournamentShareCode) return;
+
+    const isHost = document.body.classList.contains('role-host');
+    if (isHost && meta && meta.isPrivate && meta.tournamentKey) {
+        elements.tournamentShareSection.style.display = 'block';
+        elements.tournamentShareCode.innerText = meta.tournamentKey;
+    } else {
+        elements.tournamentShareSection.style.display = 'none';
+        elements.tournamentShareCode.innerText = '------';
+    }
 }
 
 function watchTournamentsList() {
@@ -1426,6 +1614,8 @@ function migrateState() {
     if (!state.lockedStats) state.lockedStats = null;
     if (!state.settings) state.settings = { matchLimit: 20 };
     if (!state.rankingSort) state.rankingSort = { key: 'won', dir: 'desc' };
+    if (typeof state.ownerUid === 'undefined') state.ownerUid = null;
+    if (!state.scorekeepers) state.scorekeepers = [];
 }
 
 async function pushToCloud() {
@@ -1476,6 +1666,7 @@ function refreshUI() {
     updateMatchHeader();
     updateH2HPlayers();
     renderH2H();
+    updateTournamentShareSection(currentMeta);
 }
 
 // --- Sharing & Data Management ---
@@ -1715,13 +1906,44 @@ async function createNewTournament() {
         rankingSort: { key: 'won', dir: 'desc' }
     };
 
+    const isPrivate = elements.newTournamentPrivate ? elements.newTournamentPrivate.checked : false;
+    let key = null;
+    if (isPrivate) {
+        // Generate a 6-character code (combination of letters and numbers)
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        key = '';
+        for (let i = 0; i < 6; i++) {
+            key += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+    }
+
     try {
         if (db) {
             // Cloud Mode
+            const metaNode = {
+                name: name,
+                isPrivate: isPrivate,
+                tournamentKey: key,
+                ownerUid: firebase.auth().currentUser ? firebase.auth().currentUser.uid : null,
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            };
+
             await db.ref('tournaments/' + name).set({
                 data: stateToSave,
+                meta: metaNode,
                 updatedAt: firebase.database.ServerValue.TIMESTAMP
             });
+
+            if (isPrivate && key) {
+                try {
+                    await db.ref('tournamentKeys/' + key).set({
+                        roomId: name
+                    });
+                } catch (keyErr) {
+                    console.error("Failed to write to tournamentKeys. Please update your Firebase Rules.", keyErr);
+                    alert(`Tournament created successfully, but the private access code could not be registered on the cloud due to Firebase security rules.\n\nError: ${keyErr.message}\n\nPlease add write permissions for '/tournamentKeys' in your Firebase console rules.`);
+                }
+            }
         } else {
             // Local Mode
             if (!tournamentsList.some(t => t.id === name)) {
@@ -1733,6 +1955,7 @@ async function createNewTournament() {
         }
 
         elements.newTournamentName.value = '';
+        if (elements.newTournamentPrivate) elements.newTournamentPrivate.checked = false;
 
         // Switch to the new one
         if (db) {

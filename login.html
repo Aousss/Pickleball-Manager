@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pickleball | Join Tournament</title>
+    <meta name="description" content="Sign in or join a Pickleball Tournament as a spectator using your unique tournament code.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="login-body">
+
+    <!-- Animated Background Orbs -->
+    <div class="login-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+    </div>
+
+    <!-- Floating pickleball decorations -->
+    <div class="deco-ball deco-ball-1">🏓</div>
+    <div class="deco-ball deco-ball-2">🏓</div>
+    <div class="deco-ball deco-ball-3">🏓</div>
+
+    <div class="login-container">
+        <!-- Hero Header -->
+        <header class="login-hero">
+            <div class="login-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+                </div>
+            </div>
+            <h1 class="login-title">Pickleball<span class="login-title-accent"> Pro</span></h1>
+            <p class="login-subtitle">Tournament Manager · Real-time Scoring · Live Standings</p>
+        </header>
+
+        <!-- Access Cards -->
+        <div class="login-cards">
+
+            <!-- Card 1: Google Sign In -->
+            <div class="login-card login-card-primary" id="card-signin">
+                <div class="login-card-icon">
+                    <i class="fa-brands fa-google"></i>
+                </div>
+                <div class="login-card-body">
+                    <h2>Sign In</h2>
+                    <p>Access your tournaments, manage players, and track scores. For Hosts &amp; Scorekeepers.</p>
+                    <button id="google-signin-btn" class="login-btn login-btn-google">
+                        <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                            <path fill="none" d="M0 0h48v48H0z"/>
+                        </svg>
+                        Continue with Google
+                    </button>
+                    <p id="signin-error" class="login-error" style="display:none;"></p>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="login-divider">
+                <span>or</span>
+            </div>
+
+            <!-- Card 2: Spectator -->
+            <div class="login-card login-card-secondary" id="card-spectator">
+                <div class="login-card-icon">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+                <div class="login-card-body">
+                    <h2>View as Spectator</h2>
+                    <p>Watch live matches and standings without signing in.</p>
+
+                    <!-- Private Tournament Code Entry -->
+                    <div class="code-entry-section">
+                        <label class="code-label">Have a tournament code?</label>
+                        <div class="code-input-row">
+                            <div class="code-boxes" id="code-boxes">
+                                <input type="text" class="code-box" maxlength="1" id="c0" data-idx="0" autocomplete="off" autocorrect="off" spellcheck="false">
+                                <input type="text" class="code-box" maxlength="1" id="c1" data-idx="1" autocomplete="off" autocorrect="off" spellcheck="false">
+                                <input type="text" class="code-box" maxlength="1" id="c2" data-idx="2" autocomplete="off" autocorrect="off" spellcheck="false">
+                                <input type="text" class="code-box" maxlength="1" id="c3" data-idx="3" autocomplete="off" autocorrect="off" spellcheck="false">
+                                <input type="text" class="code-box" maxlength="1" id="c4" data-idx="4" autocomplete="off" autocorrect="off" spellcheck="false">
+                                <input type="text" class="code-box" maxlength="1" id="c5" data-idx="5" autocomplete="off" autocorrect="off" spellcheck="false">
+                            </div>
+                            <button class="login-btn login-btn-accent" id="join-code-btn">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <p id="code-error" class="login-error" style="display:none;"></p>
+                        <div id="code-loading" class="code-loading" style="display:none;">
+                            <i class="fa-solid fa-circle-notch fa-spin"></i> Searching...
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="or-divider"><span>or</span></div>
+
+                    <!-- Public Tournaments -->
+                    <button class="login-btn login-btn-outline" id="browse-public-btn">
+                        <i class="fa-solid fa-list"></i> Browse Public Tournaments
+                    </button>
+
+                    <!-- Public Tournaments List (hidden by default) -->
+                    <div id="public-tournaments-panel" class="public-tournaments-panel" style="display:none;">
+                        <div id="public-tournaments-list" class="public-list">
+                            <div class="public-list-loading">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i> Loading tournaments...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="login-footer">
+            <p>&copy; 2026 <strong>Pickleball Pro</strong> &middot; Built for competitive excellence</p>
+        </footer>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="js/login.js"></script>
+
+</body>
+
+</html>

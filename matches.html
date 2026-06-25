@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pickleball | Live Matches</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Top Auth Widget -->
+        <div id="auth-widget" class="top-auth-widget" style="display: none;">
+            <button id="auth-signin-btn" class="btn-sm btn-accent">
+                <i class="fa-brands fa-google"></i> Sign In
+            </button>
+            <div id="auth-profile" class="profile-container" style="display: none;">
+                <img id="auth-avatar" class="profile-avatar" src="" alt="Avatar">
+                <span id="auth-name" class="profile-name"></span>
+                <button id="auth-signout-btn" class="btn-sm btn-danger-outline" title="Sign Out">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="glass-nav">
+            <a href="index.html" class="nav-btn" data-target="setup-screen">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Setup</span>
+            </a>
+            <a href="matches.html" class="nav-btn active" data-target="matches-screen">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Matches</span>
+            </a>
+            <a href="rankings.html" class="nav-btn" data-target="ranking-screen">
+                <i class="fa-solid fa-ranking-star"></i>
+                <span>Rankings</span>
+            </a>
+            <a href="analytics.html" class="nav-btn" data-target="h2h-screen">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="main-content">
+
+            <!-- Matches Screen -->
+            <section id="matches-screen" class="screen active">
+                <header class="section-header">
+                    <h2>Live Matches</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <button id="share-matches-btn" class="btn-sm"><i class="fa-solid fa-share-nodes"></i>
+                            Share</button>
+                        <button id="generate-round-btn" class="btn-sm btn-accent admin-only host-only"><i
+                                class="fa-solid fa-shuffle"></i> Update</button>
+                    </div>
+                </header>
+
+                <div id="playoff-section" style="display: none; margin-bottom: 32px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                        <div
+                            style="height: 2px; flex: 1; background: linear-gradient(to right, transparent, var(--accent));">
+                        </div>
+                        <h3
+                            style="color: var(--accent); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">
+                            <i class="fa-solid fa-trophy"></i> Championship
+                        </h3>
+                        <div
+                            style="height: 2px; flex: 1; background: linear-gradient(to left, transparent, var(--accent));">
+                        </div>
+                    </div>
+                    <div id="champion-display" style="text-align: center; margin-bottom: 24px; display: none;"></div>
+                    <div id="playoff-matches-list" class="matches-grid"></div>
+                </div>
+
+                <div id="matches-list" class="matches-grid">
+                    <div class="empty-state-card">
+                        <i class="fa-solid fa-ghost"></i>
+                        <p>No matches generated yet. Add players and launch!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scoring Overlay (Modal) -->
+            <div id="scoring-modal" class="modal">
+                <div class="modal-content glass-card">
+                    <header class="modal-header">
+                        <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-trophy"
+                                style="color: var(--warning); margin-right: 8px;"></i> Match Scoring</h3>
+                        <button class="close-modal"
+                            style="background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;"><i
+                                class="fa-solid fa-xmark"></i></button>
+                    </header>
+
+                    <div id="match-timer"
+                        style="text-align: center; margin-bottom: 24px; background: var(--bg-dark); padding: 12px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; gap: 10px; font-family: monospace; font-size: 1.25rem; color: var(--accent); font-weight: 700; border: 1px solid var(--glass-border);">
+                        <i class="fa-solid fa-stopwatch"></i>
+                        <span id="timer-clock">00:00</span>
+                    </div>
+
+                    <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 32px;">
+                        <div class="team" style="flex: 1; text-align: center;">
+                            <div id="team-a-names"
+                                style="font-size: 0.8rem; font-weight: 700; margin-bottom: 12px; min-height: 40px; display: flex; align-items: center; justify-content: center;">
+                                -</div>
+                            <div id="score-a" class="score-display">0</div>
+                            <button id="btn-score-a" class="tap-area" style="margin-top: 16px;">+1 Point</button>
+                            <button id="btn-minus-a" class="btn-sm"
+                                style="margin-top: 8px; width: 100%; border-radius: 10px;"><i
+                                    class="fa-solid fa-minus"></i></button>
+                        </div>
+
+                        <div style="font-weight: 900; opacity: 0.2; font-size: 1.5rem;">VS</div>
+
+                        <div class="team" style="flex: 1; text-align: center;">
+                            <div id="team-b-names"
+                                style="font-size: 0.8rem; font-weight: 700; margin-bottom: 12px; min-height: 40px; display: flex; align-items: center; justify-content: center;">
+                                -</div>
+                            <div id="score-b" class="score-display">0</div>
+                            <button id="btn-score-b" class="tap-area" style="margin-top: 16px;">+1 Point</button>
+                            <button id="btn-minus-b" class="btn-sm"
+                                style="margin-top: 8px; width: 100%; border-radius: 10px;"><i
+                                    class="fa-solid fa-minus"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions" style="display: flex; flex-direction: column; gap: 10px;">
+                        <button id="finish-match-btn" class="btn-accent btn-block" style="margin-bottom: 0;">Complete
+                            Match</button>
+                        <button id="reset-match-btn" class="btn-danger-outline btn-block"
+                            style="padding: 12px; font-size: 0.85rem;">Reset Scores</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="app-footer">
+            &copy; 2026 <strong>Pickleball Pro</strong> <br>
+            Engineered for excellence.
+        </footer>
+    </div>
+
+    <!-- Firebase SDKs (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

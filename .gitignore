@@ -1,0 +1,6 @@
+# Ignore local php server database dumps
+api/data.json
+
+# Ignore temporary/cache files
+.DS_Store
+Thumbs.db
