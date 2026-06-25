@@ -7,15 +7,15 @@
 
 :root {
     /* New Theme Color Palette */
-    --primary: #00544D;
-    /* Dark Teal */
-    --primary-light: #1a6e66;
-    --primary-dark: #003d38;
+    --primary: #075056;
+    /* Deep Sea Green */
+    --primary-light: #10676e;
+    --primary-dark: #033b40;
 
-    --accent: #7FAD80;
-    /* Sage Green */
-    --accent-light: #9bc49c;
-    --accent-glow: rgba(127, 173, 128, 0.5);
+    --accent: #FF5B04;
+    /* Blaze Orange */
+    --accent-light: #ff7c36;
+    --accent-glow: rgba(255, 91, 4, 0.4);
 
     --secondary: #3C85D4;
     /* Court Blue */
@@ -25,17 +25,17 @@
     --warning: #f59e0b;
     --danger: #ef4444;
 
-    --bg-dark: #001a18;
-    /* Deep Forest Black */
-    --bg-card: rgba(0, 40, 36, 0.5);
+    --bg-dark: #16232A;
+    /* Mirage */
+    --bg-card: rgba(22, 35, 42, 0.6);
 
-    --text-primary: #E8EFED;
-    /* Off-white */
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --text-primary: #E4EEF0;
+    /* Wild Sand */
+    --text-secondary: #a2b0b8;
+    --text-muted: #73848e;
 
-    --glass-border: rgba(232, 239, 237, 0.1);
-    --glass-highlight: rgba(232, 239, 237, 0.05);
+    --glass-border: rgba(228, 238, 240, 0.1);
+    --glass-highlight: rgba(228, 238, 240, 0.05);
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 
     --radius-sm: 12px;
@@ -71,10 +71,10 @@ body {
 
     /* Premium Animated Background using Court Palette */
     background-image:
-        radial-gradient(circle at 0% 0%, rgba(0, 84, 77, 0.3) 0%, transparent 40%),
+        radial-gradient(circle at 0% 0%, rgba(7, 80, 86, 0.35) 0%, transparent 40%),
         radial-gradient(circle at 100% 0%, rgba(60, 133, 212, 0.2) 0%, transparent 40%),
-        radial-gradient(circle at 100% 100%, rgba(127, 173, 128, 0.2) 0%, transparent 40%),
-        radial-gradient(circle at 0% 100%, rgba(0, 84, 77, 0.2) 0%, transparent 40%);
+        radial-gradient(circle at 100% 100%, rgba(255, 91, 4, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 0% 100%, rgba(7, 80, 86, 0.25) 0%, transparent 40%);
     background-attachment: fixed;
 }
 
