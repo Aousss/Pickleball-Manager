@@ -1,5 +1,5 @@
 /**
- * Pickleball Tournament System - Login & Spectator Entrance Logic
+ * RallyMate Tournament System - Login & Spectator Entrance Logic
  */
 
 const syncDefaults = {

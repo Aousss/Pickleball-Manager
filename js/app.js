@@ -1,5 +1,5 @@
 /**
- * Pickleball Tournament System
+ * RallyMate Tournament System
  * Logic for managing players, matches, and rankings.
  */
 
@@ -1671,7 +1671,7 @@ function refreshUI() {
 
 // --- Sharing & Data Management ---
 function shareMatches() {
-    let text = "🏓 Pickleball Matches:\n\n";
+    let text = "🏓 RallyMate Matches:\n\n";
 
     if (state.matches.length === 0 && state.playoffMatches.length === 0) {
         alert("No matches to share.");
@@ -1734,7 +1734,7 @@ function shareRankings() {
         return totalB - totalA;
     });
 
-    let text = "🏆 Pickleball Leaderboard:\n\n";
+    let text = "🏆 RallyMate Leaderboard:\n\n";
     text += `Rank | Player | W-L | Pts (Sorted by ${state.rankingSort.key} ${state.rankingSort.dir})\n`;
     text += "---------------------------\n";
 

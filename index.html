@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pickleball | Tournament Manager</title>
+    <title>RallyMate</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
@@ -56,7 +56,7 @@
             <!-- Setup Screen -->
             <section id="setup-screen" class="screen active">
                 <header class="hero-header">
-                    <h1 class="highlight">Pickleball</h1>
+                    <h1 class="highlight">RallyMate</h1>
                     <p>Elevate your tournament experience with real-time tracking and intelligent scheduling.</p>
                 </header>
 
@@ -83,16 +83,26 @@
                             <button id="create-tournament-btn" class="btn-primary" title="Create"><i
                                     class="fa-solid fa-plus"></i></button>
                         </div>
-                        <div class="input-group" style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
-                            <input type="checkbox" id="new-tournament-private" style="width: auto; height: auto; cursor: pointer;">
-                            <label for="new-tournament-private" style="margin-bottom: 0; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; user-select: none;">Make Private (access via 6-character code)</label>
+                        <div class="input-group"
+                            style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="new-tournament-private"
+                                style="width: auto; height: auto; cursor: pointer;">
+                            <label for="new-tournament-private"
+                                style="margin-bottom: 0; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; user-select: none;">Make
+                                Private (access via 6-character code)</label>
                         </div>
                         <div id="tournament-status" style="font-size: 0.75rem; color: var(--accent); min-height: 18px;">
                         </div>
-                        <div id="tournament-share-section" class="glass-card" style="display: none; margin-top: 15px; padding: 15px; border-color: var(--accent); background: rgba(127, 173, 128, 0.05); text-align: center;">
-                            <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Tournament Access Code</div>
-                            <div id="tournament-share-code" style="font-size: 1.8rem; font-weight: 800; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 10px;">------</div>
-                            <button id="copy-share-code-btn" class="btn-sm btn-accent" style="width: auto; margin: 0 auto; display: inline-flex; gap: 8px;">
+                        <div id="tournament-share-section" class="glass-card"
+                            style="display: none; margin-top: 15px; padding: 15px; border-color: var(--accent); background: rgba(127, 173, 128, 0.05); text-align: center;">
+                            <div
+                                style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
+                                Tournament Access Code</div>
+                            <div id="tournament-share-code"
+                                style="font-size: 1.8rem; font-weight: 800; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 10px;">
+                                ------</div>
+                            <button id="copy-share-code-btn" class="btn-sm btn-accent"
+                                style="width: auto; margin: 0 auto; display: inline-flex; gap: 8px;">
                                 <i class="fa-solid fa-copy"></i> Copy Invitation Code
                             </button>
                         </div>
@@ -144,7 +154,7 @@
         </main>
 
         <footer class="app-footer">
-            &copy; 2026 <strong>Pickleball Pro</strong> <br>
+            &copy; 2026 <strong>RallyMate</strong> <br>
             Engineered for excellence.
         </footer>
     </div>
