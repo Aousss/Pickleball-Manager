@@ -3,8 +3,6 @@
  * A vibrant, glassmorphic, and highly interactive UI
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
-
 :root {
     /* New Theme Color Palette */
     --primary: #075056;
@@ -61,7 +59,7 @@ html {
 }
 
 body {
-    font-family: 'Outfit', sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-primary);
     min-height: 100vh;
