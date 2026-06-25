@@ -1,4 +1,4 @@
-# Pickleball Pro - Tournament Manager
+# RallyMate - Tournament Manager
 
 An elegant, real-time Pickleball tournament management application designed with a glassmorphic dark-theme user interface. Built with HTML, Vanilla CSS, JavaScript, and Firebase Realtime Database.
 
@@ -6,16 +6,17 @@ An elegant, real-time Pickleball tournament management application designed with
 
 ## 🎨 Design System & Colors
 
-The interface uses a premium dark forest court aesthetic with glowing accents.
+The interface uses a modern, high-contrast sport court aesthetic.
 
 | Token Name | Hex Code | Visual Reference | Purpose |
 | :--- | :--- | :--- | :--- |
-| **Deep Forest Teal** | `#00544D` | 🟢 Primary | Brand brandmark, main court backgrounds, primary brand button states |
-| **Sage Green** | `#7FAD80` | 🟢 Accent | Highlights, active states, generated codes, and accent actions |
-| **Court Blue** | `#3C85D4` | 🔵 Secondary | Auxiliary features, alternate routes, and blue markers |
-| **Success Emerald** | `#10B981` | 🟢 Success | Score winning records, active states, active synced states |
-| **Danger Crimson** | `#EF4444` | 🔴 Danger | Loss records, wipe actions, connection failures, and error alerts |
-| **Deep Forest Black** | `#001A18` | ⚫ Background | Deep dark canvas background |
+| **Deep Sea Green** | `#075056` | 🟢 Primary | Core court brand branding, primary buttons and main focus borders |
+| **Blaze Orange** | `#FF5B04` | 🟠 Accent | Glowing highlights, active buttons, invitation codes, and key interactive triggers |
+| **Court Blue** | `#3C85D4` | 🔵 Secondary | Auxiliary stats, secondary charts, and sub-nav badges |
+| **Success Emerald** | `#10B981` | 🟢 Success | Wins, points additions, and online sync status |
+| **Danger Crimson** | `#EF4444` | 🔴 Danger | Losses, wipes, offline/errors, and deletion warnings |
+| **Mirage Black** | `#16232A` | ⚫ Background | Deep dark blue-grey canvas background & glass card bases |
+| **Wild Sand** | `#E4EEF0` | ⚪ Contrast Text | Main high-contrast text and clean foreground elements |
 
 ---
 
